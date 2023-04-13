@@ -115,10 +115,16 @@ const App = () => {
           <View
             style={{
               height: '20%',
-              backgroundColor: 'yellow',
+              // backgroundColor: 'yellow',
               margin: 10,
               padding: 8,
             }}>
+            <View style={{marginBottom: 20, alignItems: 'center'}}>
+              <Text style={{fontWeight: '700', fontSize: 20}}>
+                {' '}
+                API FETCHING USING AXIOS ⬇️⬇️
+              </Text>
+            </View>
             <App2 />
           </View>
           <View style={{height: '20%', margin: 10, backgroundColor: 'green'}}>
