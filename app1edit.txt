@@ -1,0 +1,151 @@
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  PermissionsAndroid,
+} from 'react-native';
+import React, {useState} from 'react';
+import Geolocation from '@react-native-community/geolocation';
+
+const requestLocationPermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: 'Geolocation Permission',
+        message: 'Can we access your location?',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+    // console.log('granted', granted);
+    if (granted === 'granted') {
+      // console.log('You can use Geolocation');
+      return true;
+    } else {
+      // console.log('You cannot use Geolocation');
+      return false;
+    }
+  } catch (err) {
+    return false;
+  }
+};
+
+const App = () => {
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setlongitude] = useState(0);
+
+  const getLoc = () => {
+    const result = requestLocationPermission();
+
+    result.then(res => {
+      // console.log('res is:', res);
+      if (res) {
+        if (latitude == 0 && longitude == 0) {
+          Geolocation.getCurrentPosition(loc => {
+            setLatitude(loc.coords.latitude);
+            setlongitude(loc.coords.longitude);
+          });
+        } else {
+          setLatitude(0);
+          setlongitude(0);
+        }
+      }
+      //,
+      // error => {
+      //   console.log(error.code, error.message);
+      //   // setLocation(false);
+      //   setLatitude(0);
+      //   setlongitude(0);
+      // };
+    });
+  };
+
+  // const funcLoc = () => {
+  //   if (latitude == 0 && longitude == 0) {
+  //     Geolocation.getCurrentPosition(loc => {
+  //       setLatitude(loc.coords.latitude);
+  //       setlongitude(loc.coords.longitude);
+  //     });
+  //   } else {
+  //     setLatitude(0);
+  //     setlongitude(0);
+  //   }
+  // };
+
+  return (
+    <View style={styles.mainView}>
+      <View>
+        <Text>latitude, {latitude}</Text>
+        <Text>longitude, {longitude}</Text>
+      </View>
+
+      <TouchableOpacity onPress={getLoc} style={styles.press}>
+        <View>
+          <Text>Click to refresh or get longitude and latitude.</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default App;
+
+const styles = StyleSheet.create({
+  mainView: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  press: {
+    backgroundColor: 'red',
+  },
+});
+
+// import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+// import React, {useState} from 'react';
+// import Geolocation from '@react-native-community/geolocation';
+
+// const App = () => {
+//   const [latitude, setLatitude] = useState(0);
+//   const [longitude, setlongitude] = useState(0);
+
+//   const funcLoc = () => {
+//     if (latitude == 0 && longitude == 0) {
+//       Geolocation.getCurrentPosition(loc => {
+//         setLatitude(loc.coords.latitude);
+//         setlongitude(loc.coords.longitude);
+//       });
+//     } else {
+//       setLatitude(0);
+//       setlongitude(0);
+//     }
+//   };
+//   return (
+//     <View style={styles.mainView}>
+//       <View>
+//         <Text>latitude, {latitude}</Text>
+//         <Text>longitude, {longitude}</Text>
+//       </View>
+
+//       <TouchableOpacity onPress={funcLoc} style={styles.press}>
+//         <View>
+//           <Text>Click to refresh or get longitude and latitude.</Text>
+//         </View>
+//       </TouchableOpacity>
+//     </View>
+//   );
+// };
+
+// export default App;
+
+// const styles = StyleSheet.create({
+//   mainView: {
+//     alignItems: 'center',
+//     marginTop: 10,
+//   },
+//   press: {
+//     backgroundColor: 'red',
+//   },
+// });
